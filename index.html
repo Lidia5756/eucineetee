@@ -81,10 +81,12 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
-    video {
+    .video-container iframe {
+        aspect-ratio: 16/9;
         width: 100%;
-        border-radius: 15px;
-        background: #000;
+        height: auto;
+        min-height: 300px;
+        max-height: 80vh;
     }
 
     .channel-grid {
@@ -380,10 +382,11 @@
                 <div class="category-tab">Infantil</div>
                 <div class="category-tab">Notícias</div>
                 <div class="category-tab">Documentários</div>
+                <div class="category-tab">24 Horas</div>
             </div>
 
             <div class="video-container">
-                <video id="video" controls></video>
+                <!-- Player will be inserted here dynamically -->
             </div>
 
             <div id="channelGrid" class="channel-grid"></div>
@@ -531,35 +534,147 @@ document.getElementById('submitAccessCode').addEventListener('click', () => {
 function loadChannels() {
     const channelGrid = document.getElementById('channelGrid');
     const channels = [
-        { name: "PREMIER 1", url: "https://new.m3u8.one/pre1/tracks-v1a1/mono.m3u8", type: "Esportes", icon: "futbol" },
-        { name: "PREMIER 2", url: "https://stream.m3u8.one/pre2/tracks-v1a1/mono.m3u8", type: "Esportes", icon: "futbol" },
-        { name: "PREMIER 7", url: "https://new.m3u8.one/pre7/tracks-v1a1/mono.m3u8", type: "Esportes", icon: "futbol" },
-        { name: "Globo SP", url: "https://stream.m3u8.one/globosp/tracks-v1a1/mono.m3u8", type: "Aberto", icon: "tv" },
-        { name: "BAND", url: "https://stream.m3u8.one/band/tracks-v1a1/mono.m3u8", type: "Aberto", icon: "broadcast-tower" },
-        { name: "SBT", url: "https://new.m3u8.one/sbt/tracks-v1a1/mono.m3u8", type: "Aberto", icon: "tv" },
-        { name: "CNN Brasil", url: "https://new.m3u8.one/cnnbrasil/tracks-v1a1/mono.m3u8", type: "Notícias", icon: "newspaper" },
-        { name: "Record", url: "https://video07.logicahost.com.br/portaldatropical/portaldatropical/chunklist_w1786977757.m3u8", type: "Aberto", icon: "tv" },
-        { name: "SporTV", url: "https://new.m3u8.one/sportv/tracks-v1a1/mono.m3u8", type: "Esportes", icon: "running" },
-        { name: "SporTV 2", url: "https://new.m3u8.one/sportv2/tracks-v1a1/mono.m3u8", type: "Esportes", icon: "running" },
-        { name: "SporTV 3", url: "https://new.m3u8.one/sportv3/tracks-v1a1/mono.m3u8", type: "Esportes", icon: "running" },
-        { name: "TV Brasil", url: "https://tvbrasil-stream.ebc.com.br/chunks.m3u8", type: "Aberto", icon: "tv" },
-        { name: "Telecine Action", url: "https://new.m3u8.one/teleaction/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "Telecine Touch", url: "https://new.m3u8.one/teletouch/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "Telecine Premium", url: "https://new.m3u8.one/telepremium/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "Telecine Pipoca", url: "https://new.m3u8.one/telepipoca/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "Telecine Fun", url: "https://new.m3u8.one/telefun/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "Telecine Cult", url: "https://new.m3u8.one/telecult/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "Warner TV", url: "https://new.m3u8.one/warnetv/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "tv" },
-        { name: "History Channel", url: "https://new.m3u8.one/history/tracks-v1a1/mono.m3u8", type: "Documentários", icon: "book" },
-        { name: "Cartoon Network", url: "https://new.m3u8.one/cartoon/tracks-v1a1/mono.m3u8", type: "Infantil", icon: "child" },
-        { name: "Disney Channel", url: "https://new.m3u8.one/disneychannel/tracks-v1a1/mono.m3u8", type: "Infantil", icon: "child" },
-        { name: "Nick Jr", url: "https://new.m3u8.one/nickjr/tracks-v1a1/mono.m3u8", type: "Infantil", icon: "child" },
-        { name: "HBO Plus", url: "https://new.m3u8.one/hboplus/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "HBO Family", url: "https://new.m3u8.one/hbofamily/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "HBO 2", url: "https://new.m3u8.one/hbo2/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "HBO", url: "https://new.m3u8.one/hbo/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "TNT", url: "https://stream.m3u8.one/tnt/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "film" },
-        { name: "Star Channel", url: "https://new.m3u8.one/starchannel/tracks-v1a1/mono.m3u8", type: "Filmes", icon: "star" }
+        // Streaming Services
+        { name: "Amazon Prime Video", url: "https://embedcanaistv.com/amazonprimevideo/", type: "Filmes", icon: "film" },
+        { name: "Disney Plus", url: "https://embedcanaistv.com/disneyplus/", type: "Filmes", icon: "film" },
+        { name: "HBO Max", url: "https://embedcanaistv.com/max/", type: "Filmes", icon: "film" },
+        { name: "HBO Max 2", url: "https://embedcanaistv.com/max2/", type: "Filmes", icon: "film" },
+        { name: "HBO Max 3", url: "https://embedcanaistv.com/max3/", type: "Filmes", icon: "film" },
+        { name: "HBO Max 4", url: "https://embedcanaistv.com/max4/", type: "Filmes", icon: "film" },
+        { name: "Paramount+", url: "https://embedcanaistv.com/paramountplus/", type: "Filmes", icon: "film" },
+        { name: "Star+", url: "https://embedcanaistv.com/starplus/", type: "Filmes", icon: "film" },
+
+        // Sports Channels
+        { name: "Band Sports", url: "https://embedcanaistv.com/bandsports/", type: "Esportes", icon: "futbol" },
+        { name: "Combate", url: "https://embedcanaistv.com/combate/", type: "Esportes", icon: "futbol" },
+        { name: "Cazé TV", url: "https://embedcanaistv.com/cazetv/", type: "Esportes", icon: "futbol" },
+        { name: "ESPN", url: "https://embedcanaistv.com/espn/", type: "Esportes", icon: "running" },
+        { name: "ESPN 2", url: "https://embedcanaistv.com/espn2/", type: "Esportes", icon: "running" },
+        { name: "ESPN 3", url: "https://embedcanaistv.com/espn3/", type: "Esportes", icon: "running" },
+        { name: "ESPN 4", url: "https://embedcanaistv.com/espn4/", type: "Esportes", icon: "running" },
+        { name: "ESPN 5", url: "https://embedcanaistv.com/espn5/", type: "Esportes", icon: "running" },
+        { name: "ESPN 6", url: "https://embedcanaistv.com/espn6/", type: "Esportes", icon: "running" },
+        { name: "Nosso Futebol", url: "https://embedcanaistv.com/nossofutebol/", type: "Esportes", icon: "futbol" },
+        { name: "Premiere Clubes", url: "https://embedcanaistv.com/premiereclubes/", type: "Esportes", icon: "futbol" },
+        { name: "Premiere 2", url: "https://embedcanaistv.com/premiere2/", type: "Esportes", icon: "futbol" },
+        { name: "Premiere 3", url: "https://embedcanaistv.com/premiere3/", type: "Esportes", icon: "futbol" },
+        { name: "Premiere 4", url: "https://embedcanaistv.com/premiere4/", type: "Esportes", icon: "futbol" },
+        { name: "Premiere 5", url: "https://embedcanaistv.com/premiere5/", type: "Esportes", icon: "futbol" },
+        { name: "Premiere 6", url: "https://embedcanaistv.com/premiere6/", type: "Esportes", icon: "futbol" },
+        { name: "Premiere 7", url: "https://embedcanaistv.com/premiere7/", type: "Esportes", icon: "futbol" },
+        { name: "Premiere 8", url: "https://embedcanaistv.com/premiere8/", type: "Esportes", icon: "futbol" },
+        { name: "SporTV", url: "https://embedcanaistv.com/sportv/", type: "Esportes", icon: "running" },
+        { name: "SporTV 2", url: "https://embedcanaistv.com/sportv2/", type: "Esportes", icon: "running" },
+        { name: "SporTV 3", url: "https://embedcanaistv.com/sportv3/", type: "Esportes", icon: "running" },
+        { name: "TNT Sports", url: "https://embedcanaistv.com/tntsports/", type: "Esportes", icon: "futbol" },
+        { name: "TNT Sports 2", url: "https://embedcanaistv.com/tntsports2/", type: "Esportes", icon: "futbol" },
+        { name: "TNT Sports 3", url: "https://embedcanaistv.com/tntsports3/", type: "Esportes", icon: "futbol" },
+        { name: "UFC Fight Pass", url: "https://embedcanaistv.com/ufcfightpass/", type: "Esportes", icon: "fist-raised" },
+
+        // Open TV Channels
+        { name: "Band SP", url: "https://embedcanaistv.com/bandsp/", type: "Aberto", icon: "tv" },
+        { name: "Globo BA", url: "https://embedcanaistv.com/globoba/", type: "Aberto", icon: "tv" },
+        { name: "Globo DF", url: "https://embedcanaistv.com/globodf/", type: "Aberto", icon: "tv" },
+        { name: "Globo MG", url: "https://embedcanaistv.com/globomg/", type: "Aberto", icon: "tv" },
+        { name: "Globo RJ", url: "https://embedcanaistv.com/globorj/", type: "Aberto", icon: "tv" },
+        { name: "Globo RS", url: "https://embedcanaistv.com/globors/", type: "Aberto", icon: "tv" },
+        { name: "Globo SP", url: "https://embedcanaistv.com/globosp/", type: "Aberto", icon: "tv" },
+        { name: "Record MG", url: "https://embedcanaistv.com/recordmg/", type: "Aberto", icon: "tv" },
+        { name: "Record RJ", url: "https://embedcanaistv.com/recordrj/", type: "Aberto", icon: "tv" },
+        { name: "Record SP", url: "https://embedcanaistv.com/recordsp/", type: "Aberto", icon: "tv" },
+        { name: "RedeTV", url: "https://embedcanaistv.com/redetv/", type: "Aberto", icon: "tv" },
+        { name: "Rede Vida", url: "https://embedcanaistv.com/redevida/", type: "Aberto", icon: "tv" },
+        { name: "SBT SP", url: "https://embedcanaistv.com/sbtsp/", type: "Aberto", icon: "tv" },
+        { name: "TV Cultura", url: "https://embedcanaistv.com/tvcultura/", type: "Aberto", icon: "tv" },
+
+        // Movies and Series
+        { name: "A&E", url: "https://embedcanaistv.com/aee/", type: "Filmes", icon: "film" },
+        { name: "Adult Swim", url: "https://embedcanaistv.com/adultswim/", type: "Filmes", icon: "film" },
+        { name: "AMC", url: "https://embedcanaistv.com/amc/", type: "Filmes", icon: "film" },
+        { name: "AXN", url: "https://embedcanaistv.com/axn/", type: "Filmes", icon: "film" },
+        { name: "Cinecanal", url: "https://embedcanaistv.com/cinecanal/", type: "Filmes", icon: "film" },
+        { name: "Cinemax", url: "https://embedcanaistv.com/cinemax/", type: "Filmes", icon: "film" },
+        { name: "Dark Flix", url: "https://embedcanaistv.com/darkflix/", type: "Filmes", icon: "film" },
+        { name: "Dark Matter", url: "https://embedcanaistv.com/darkmatter/", type: "Filmes", icon: "film" },
+        { name: "Film & Arts", url: "https://embedcanaistv.com/filmarts/", type: "Filmes", icon: "film" },
+        { name: "FX", url: "https://embedcanaistv.com/fx/", type: "Filmes", icon: "film" },
+        { name: "HBO", url: "https://embedcanaistv.com/hbo/", type: "Filmes", icon: "film" },
+        { name: "HBO 2", url: "https://embedcanaistv.com/hbo2/", type: "Filmes", icon: "film" },
+        { name: "HBO Family", url: "https://embedcanaistv.com/hbofamily/", type: "Filmes", icon: "film" },
+        { name: "HBO Mundi", url: "https://embedcanaistv.com/hbomundi/", type: "Filmes", icon: "film" },
+        { name: "HBO Plus", url: "https://embedcanaistv.com/hboplus/", type: "Filmes", icon: "film" },
+        { name: "HBO Pop", url: "https://embedcanaistv.com/hbopop/", type: "Filmes", icon: "film" },
+        { name: "HBO Signature", url: "https://embedcanaistv.com/hbosignature/", type: "Filmes", icon: "film" },
+        { name: "HBO Xtreme", url: "https://embedcanaistv.com/hboxtreme/", type: "Filmes", icon: "film" },
+        { name: "Megapix", url: "https://embedcanaistv.com/megapix/", type: "Filmes", icon: "film" },
+        { name: "Movie Sphere", url: "https://embedcanaistv.com/moviesphere/", type: "Filmes", icon: "film" },
+        { name: "Sony Channel", url: "https://embedcanaistv.com/sonychannel/", type: "Filmes", icon: "film" },
+        { name: "Space", url: "https://embedcanaistv.com/space/", type: "Filmes", icon: "film" },
+        { name: "Spark TV", url: "https://embedcanaistv.com/sparktvluzeamor/", type: "Filmes", icon: "film" },
+        { name: "Star Channel", url: "https://embedcanaistv.com/starchannel/", type: "Filmes", icon: "film" },
+        { name: "Studio Universal", url: "https://embedcanaistv.com/studiouniversal/", type: "Filmes", icon: "film" },
+        { name: "TC Action", url: "https://embedcanaistv.com/tcaction/", type: "Filmes", icon: "film" },
+        { name: "TC Cult", url: "https://embedcanaistv.com/tccult/", type: "Filmes", icon: "film" },
+        { name: "TC Fun", url: "https://embedcanaistv.com/tcfun/", type: "Filmes", icon: "film" },
+        { name: "TC Pipoca", url: "https://embedcanaistv.com/tcpipoca/", type: "Filmes", icon: "film" },
+        { name: "TC Premium", url: "https://embedcanaistv.com/tcpremium/", type: "Filmes", icon: "film" },
+        { name: "TC Touch", url: "https://embedcanaistv.com/tctouch/", type: "Filmes", icon: "film" },
+        { name: "TNT", url: "https://embedcanaistv.com/tnt/", type: "Filmes", icon: "film" },
+        { name: "TNT Novelas", url: "https://embedcanaistv.com/tntnovelas/", type: "Filmes", icon: "film" },
+        { name: "TNT Series", url: "https://embedcanaistv.com/tntseries/", type: "Filmes", icon: "film" },
+        { name: "Universal TV", url: "https://embedcanaistv.com/universaltv/", type: "Filmes", icon: "film" },
+        { name: "USA Network", url: "https://embedcanaistv.com/usa/", type: "Filmes", icon: "film" },
+        { name: "Warner Channel", url: "https://embedcanaistv.com/warner/", type: "Filmes", icon: "film" },
+
+        // Documentaries and Variety
+        { name: "Animal Planet", url: "https://embedcanaistv.com/animalplanet/", type: "Documentários", icon: "paw" },
+        { name: "Arte 1", url: "https://embedcanaistv.com/arte1/", type: "Documentários", icon: "palette" },
+        { name: "Canal Brasil", url: "https://embedcanaistv.com/canalbrasil/", type: "Documentários", icon: "flag" },
+        { name: "Comedy Central", url: "https://embedcanaistv.com/comedycentral/", type: "Documentários", icon: "laugh" },
+        { name: "Discovery Channel", url: "https://embedcanaistv.com/discoverychannel/", type: "Documentários", icon: "microscope" },
+        { name: "Discovery H&H", url: "https://embedcanaistv.com/discoveryhh/", type: "Documentários", icon: "home" },
+        { name: "Discovery Science", url: "https://embedcanaistv.com/discoveryscience/", type: "Documentários", icon: "flask" },
+        { name: "Discovery Theater", url: "https://embedcanaistv.com/discoverytheater/", type: "Documentários", icon: "theater-masks" },
+        { name: "Discovery World", url: "https://embedcanaistv.com/discoveryworld/", type: "Documentários", icon: "globe" },
+        { name: "Discovery ID", url: "https://embedcanaistv.com/discoveryid/", type: "Documentários", icon: "search" },
+        { name: "Discovery Turbo", url: "https://embedcanaistv.com/discoveryturbo/", type: "Documentários", icon: "car" },
+        { name: "Fish TV", url: "https://embedcanaistv.com/fishtv/", type: "Documentários", icon: "fish" },
+        { name: "Food Network", url: "https://embedcanaistv.com/foodnetwork/", type: "Documentários", icon: "utensils" },
+        { name: "Fuel TV", url: "https://embedcanaistv.com/fueltv/", type: "Documentários", icon: "gas-pump" },
+        { name: "GNT", url: "https://embedcanaistv.com/gnt/", type: "Documentários", icon: "female" },
+        { name: "HGTV", url: "https://embedcanaistv.com/hgtv/", type: "Documentários", icon: "home" },
+        { name: "History", url: "https://embedcanaistv.com/history/", type: "Documentários", icon: "landmark" },
+        { name: "History 2", url: "https://embedcanaistv.com/history2/", type: "Documentários", icon: "landmark" },
+        { name: "Lifetime", url: "https://embedcanaistv.com/lifetime/", type: "Documentários", icon: "heart" },
+        { name: "Multishow", url: "https://embedcanaistv.com/multishow/", type: "Documentários", icon: "music" },
+        { name: "MTV", url: "https://embedcanaistv.com/mtv/", type: "Documentários", icon: "music" },
+        { name: "National Geographic", url: "https://embedcanaistv.com/nationalgeografic/", type: "Documentários", icon: "mountain" },
+        { name: "TLC", url: "https://embedcanaistv.com/tlc/", type: "Documentários", icon: "female" },
+        { name: "Viva", url: "https://embedcanaistv.com/viva/", type: "Documentários", icon: "smile" },
+
+        // News
+        { name: "Band News", url: "https://embedcanaistv.com/bandnews/", type: "Notícias", icon: "newspaper" },
+        { name: "CNN Brasil", url: "https://embedcanaistv.com/cnnbrasil/", type: "Notícias", icon: "newspaper" },
+        { name: "Globo News", url: "https://embedcanaistv.com/globonews/", type: "Notícias", icon: "newspaper" },
+        { name: "Jovem Pan News", url: "https://embedcanaistv.com/jovempannews/", type: "Notícias", icon: "newspaper" },
+        { name: "Record News", url: "https://embedcanaistv.com/recordnews/", type: "Notícias", icon: "newspaper" },
+
+        // Kids
+        { name: "Cartoon Network", url: "https://embedcanaistv.com/cartoonnetwork/", type: "Infantil", icon: "child" },
+        { name: "Cartoonito", url: "https://embedcanaistv.com/cartoonito/", type: "Infantil", icon: "child" },
+        { name: "Discovery Kids", url: "https://embedcanaistv.com/discoverykids/", type: "Infantil", icon: "child" },
+        { name: "Disney Channel", url: "https://embedcanaistv.com/disneychannel/", type: "Infantil", icon: "child" },
+        { name: "DreamWorks", url: "https://embedcanaistv.com/dreamworkschannel/", type: "Infantil", icon: "dragon" },
+        { name: "Gloob", url: "https://embedcanaistv.com/gloob/", type: "Infantil", icon: "child" },
+        { name: "Gloobinho", url: "https://embedcanaistv.com/gloobinho/", type: "Infantil", icon: "baby" },
+        { name: "Nick Jr", url: "https://embedcanaistv.com/nickjr/", type: "Infantil", icon: "child" },
+        { name: "Nickelodeon", url: "https://embedcanaistv.com/nickelodeon/", type: "Infantil", icon: "child" },
+        { name: "Tooncast", url: "https://embedcanaistv.com/tooncast/", type: "Infantil", icon: "child" },
+
+        // 24h Channels
+        { name: "24h Simpsons", url: "https://embedcanaistv.com/24h-simpsons/", type: "24 Horas", icon: "clock" },
+        { name: "24h Patrulha Canina", url: "https://embedcanaistv.com/24h-patrulhacanina/", type: "24 Horas", icon: "clock" },
+        { name: "24h Chaves", url: "https://embedcanaistv.com/24h-chaves/", type: "24 Horas", icon: "clock" }
     ];
 
     channelGrid.innerHTML = '';
@@ -579,49 +694,36 @@ function loadChannels() {
 }
 
 function playChannel(channel) {
-    const video = document.getElementById('video');
+    const playerContainer = document.querySelector('.video-container');
     document.getElementById('loading').style.display = 'flex';
-    video.setAttribute('playsinline', '');
-    video.setAttribute('webkit-playsinline', '');
-    video.setAttribute('x5-playsinline', '');
-    
-    if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(channel.url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            video.play();
-            document.getElementById('loading').style.display = 'none';
-        });
-        video.addEventListener('loadedmetadata', function() {
-            video.controls = true;
-            video.setAttribute('controlsList', 'nodownload');
-            if (document.pictureInPictureEnabled) {
-                video.setAttribute('disablePictureInPicture', false);
-            }
-        });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = channel.url;
-        video.addEventListener('loadedmetadata', function() {
-            video.controls = true;
-            video.setAttribute('controlsList', 'nodownload');
-            if (document.pictureInPictureEnabled) {
-                video.setAttribute('disablePictureInPicture', false);
-            }
-            video.play();
-            document.getElementById('loading').style.display = 'none';
-        });
+
+    // Remove existing video element if present
+    const existingVideo = document.querySelector('iframe');
+    if (existingVideo) {
+        existingVideo.remove();
     }
+
+    // Create and insert iframe
+    const iframe = document.createElement('iframe');
+    iframe.src = channel.url;
+    iframe.style.width = '100%';
+    iframe.style.height = '600px';
+    iframe.style.border = 'none';
+    iframe.style.borderRadius = '15px';
+    iframe.setAttribute('allowfullscreen', '');
+
+    playerContainer.appendChild(iframe);
+    document.getElementById('loading').style.display = 'none';
 }
 
 document.getElementById('searchInput').addEventListener('input', function(e) {
     const searchTerm = e.target.value.toLowerCase();
     const channelCards = document.querySelectorAll('.channel-card');
-    
+
     channelCards.forEach(card => {
         const channelName = card.querySelector('h3').textContent.toLowerCase();
         const channelType = card.querySelector('p').textContent.toLowerCase();
-        
+
         if (channelName.includes(searchTerm) || channelType.includes(searchTerm)) {
             card.style.display = 'block';
         } else {
@@ -635,10 +737,10 @@ document.querySelectorAll('.category-tab').forEach(tab => {
     tab.addEventListener('click', function() {
         document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
-        
+
         const category = this.textContent;
         const channelCards = document.querySelectorAll('.channel-card');
-        
+
         channelCards.forEach(card => {
             const channelType = card.querySelector('p').textContent;
             if (category === 'Todos' || channelType === category) {
